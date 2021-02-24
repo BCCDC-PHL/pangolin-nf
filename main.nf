@@ -13,5 +13,6 @@ workflow {
   main:
     prepare_multi_fasta(ch_analysis_dirs.combine(ch_artic_analysis_version))
     pangolin(prepare_multi_fasta.out)
+    pangolin.out.collectFile(keepHeader: true, sort: { it.text }, name: "pangolin_lineages.csv", storeDir: "${params.outdir}")
   
 }

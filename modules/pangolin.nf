@@ -29,11 +29,12 @@ process pangolin {
   tuple val(run_id), path(consensus_multi_fasta)
 
   output:
-  tuple val(run_id), path("${run_id}_lineage_report.csv")
+  opath("${run_id}_lineage_report.csv")
 
   script:
   """
+  PANGOLIN_VERSION=\$(pangolin -v | cut -d ' ' -f 2)
   pangolin ${consensus_multi_fasta}
-  awk -F "," 'BEGIN { OFS=FS }; /^taxon/ { print "run_id", "sample_id", \$2, \$3, \$4, \$5, \$6 }; !/^taxon/ { print "${run_id}", \$1, \$2, \$3, \$4, \$5, \$6 }' lineage_report.csv > ${run_id}_lineage_report.csv
+  awk -F "," -v pangolin_version="\${PANGOLIN_VERSION}" 'BEGIN { OFS=FS }; /^taxon/ { print "run_id", "sample_id", \$2, \$3, \$4, "pangolin_version", \$5, \$6 }; !/^taxon/ { print "${run_id}", \$1, \$2, \$3, \$4, pangolin_version, \$5, \$6 }' lineage_report.csv > ${run_id}_lineage_report.csv
   """
 }
