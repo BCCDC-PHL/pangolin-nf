@@ -29,7 +29,7 @@ process pangolin {
   tuple val(run_id), path(consensus_multi_fasta)
 
   output:
-  opath("${run_id}_lineage_report.csv")
+  path("${run_id}_lineage_report.csv")
 
   script:
   """
