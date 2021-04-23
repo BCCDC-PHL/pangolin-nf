@@ -13,6 +13,22 @@ process update_pangolin {
   """
 }
 
+process list_all_samples_for_run {
+  tag { run_id }
+
+  executor 'local'
+
+  input:
+  val(run_id)
+
+  output:
+  tuple val(run_id), path(sample_list)
+
+  script
+  """
+  """
+}
+
 process get_latest_artic_analysis_version {
 
   tag { run_id }
@@ -72,8 +88,7 @@ process pangolin {
   script:
   """
   PANGOLIN_VERSION=\$(pangolin -v | cut -d ' ' -f 2)
-  PANGOLEARN_VERSION=\$(pangolin -pv | cut -d ' ' -f 2)
   pangolin ${consensus_multi_fasta}
-  awk -F "," -v pangolin_version="\${PANGOLIN_VERSION}" -v pangolearn_version="\${PANGOLEARN_VERSION}" 'BEGIN { OFS=FS }; /^taxon/ { print "run_id", "sample_id", \$2, \$3, \$4, "pangolin_version", "pangolearn_version", \$5, \$6 }; !/^taxon/ { print "${run_id}", \$1, \$2, \$3, \$4, pangolin_version, pangolearn_version, \$5, \$6 }' lineage_report.csv > ${run_id}_lineage_report.csv
+  awk -F "," -v pangolin_version="\${PANGOLIN_VERSION}" 'BEGIN { OFS=FS }; /^taxon/ { print "run_id", "sample_id", \$2, \$3, \$4, "pangolin_version", \$5, \$6 }; !/^taxon/ { print "${run_id}", \$1, \$2, \$3, \$4, pangolin_version, \$5, \$6 }' lineage_report.csv > ${run_id}_lineage_report.csv
   """
 }
