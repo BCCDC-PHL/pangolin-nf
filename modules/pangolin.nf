@@ -1,3 +1,53 @@
+process update_pangolin {
+  executor 'local'
+
+  input:
+  val(should_update)
+
+  output:
+  val(true)
+
+  script:
+  """
+  pangolin --update
+  """
+}
+
+process list_all_samples_for_run {
+  tag { run_id }
+
+  executor 'local'
+
+  input:
+  val(run_id)
+
+  output:
+  tuple val(run_id), path(sample_list)
+
+  script
+  """
+  """
+}
+
+process get_latest_artic_analysis_version {
+
+  tag { run_id }
+
+  executor 'local'
+
+  input:
+  path(analysis_dir)
+
+  output:
+  tuple val(run_id), path("latest_artic_analysis_version")
+
+  script:
+  run_id = analysis_dir.baseName
+  """
+  ls -1 ${run_id} | grep "ncov2019-artic-nf-.*-output" | cut -d '-' -f 4 | tail -n 1 > latest_artic_analysis_version
+  """
+}
+
 process prepare_multi_fasta {
 
   tag { run_id }
@@ -5,19 +55,23 @@ process prepare_multi_fasta {
   executor 'local'
 
   input:
-  tuple path(analysis_dir), val(artic_analysis_version)
+  tuple val(run_id), path(analysis_dir), path(latest_artic_analysis_version), val(genome_completeness_threshold)
 
   output:
   tuple val(run_id), path("${run_id}.consensus.fa")
 
   script:
-  run_id = analysis_dir.baseName
   // awk line takes fasta header like this:     >Consensus_R123456.primertrimmed.consensus_threshol_0.75_quality_20
   // ...and converts it to something like this: >R123456
   """
-  cat ${analysis_dir}/ncov2019-artic-nf-v${artic_analysis_version}-output/ncovIllumina_sequenceAnalysis_makeConsensus/*.fa \
-    | awk -F "_" '/^>/ { split(\$2, a, "."); print ">"a[1] }; !/^>/ { print \$0 }' \
-    > ${run_id}.consensus.fa
+  export LATEST_ANALYSIS=\$(cat ${latest_artic_analysis_version})
+  tail -n+2 ${analysis_dir}/ncov2019-artic-nf-\${LATEST_ANALYSIS}-output/*.qc.csv | grep -v '^NEG' | grep -v '^POS' | awk -F "," 'BEGIN {OFS=FS}; \$2 < (100 - ${genome_completeness_threshold}) {print \$1,\$2}' > included_samples.csv
+  tail -n+2 ${analysis_dir}/ncov2019-artic-nf-\${LATEST_ANALYSIS}-output/*.qc.csv | grep -v '^NEG' | grep -v '^POS' | awk -F "," 'BEGIN {OFS=FS}; \$2 > (100 - ${genome_completeness_threshold}) {print \$1,\$2}' > excluded_samples.csv
+  while IFS="," read -r sample_id percent_n; do
+    cat ${analysis_dir}/ncov2019-artic-nf-\${LATEST_ANALYSIS}-output/ncovIllumina_sequenceAnalysis_makeConsensus/\${sample_id}*.fa \
+      | awk -F "_" '/^>/ { split(\$2, a, "."); print ">"a[1] }; !/^>/ { print \$0 }' \
+      >> ${run_id}.consensus.fa;
+  done < included_samples.csv
   """
 }
 
@@ -26,7 +80,7 @@ process pangolin {
   tag { run_id }
 
   input:
-  tuple val(run_id), path(consensus_multi_fasta)
+  tuple val(run_id), path(consensus_multi_fasta), val(pangolin_updated)
 
   output:
   path("${run_id}_lineage_report.csv")
