@@ -14,11 +14,12 @@ NXF_VER=20.10.0 nextflow -quiet run ./main.nf \
        --outdir results
 
 cp .nextflow.log artifacts/
+cp -r results ../artifacts/pull_request_results
 
 # run tests against previous previous_release to compare outputs 
 git clone https://github.com/BCCDC-PHL/pangolin-nf.git previous_release 
 cd previous_release
-git checkout -b previous_release dc6c4d084088dd6083bf7234374548b49f4619ba 
+git checkout -b previous-release dc6c4d084088dd6083bf7234374548b49f4619ba 
 
 
 echo Nextflow run previous release in --illumina mode.. >> ../artifacts/test_artifact.log
@@ -29,6 +30,7 @@ NXF_VER=20.10.0 nextflow -quiet run ./main.nf \
        --outdir results
 
 cp .nextflow.log ../artifacts/previous_release.nextflow.log
+cp -r results ../artifacts/previous_release_results
 
 cd ..
 
