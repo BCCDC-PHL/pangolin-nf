@@ -11,7 +11,6 @@ include { add_records_for_samples_below_completeness_threshold } from './modules
 workflow {
 
   ch_analysis_dirs = Channel.fromPath("${params.analysis_parent_dir}/*", type: 'dir')
-  ch_artic_analysis_version = Channel.value("${params.artic_analysis_version}")
   ch_genome_completeness_threshold = Channel.value("${params.genome_completeness_threshold}")
 
   main:
