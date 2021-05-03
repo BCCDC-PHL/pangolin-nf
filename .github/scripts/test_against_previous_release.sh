@@ -10,7 +10,7 @@ echo Nextflow run current PR in --illumina mode.. >> artifacts/test_artifact.log
 NXF_VER=20.10.0 nextflow -quiet run ./main.nf \
        -profile conda \
        --cache ~/.conda/envs \
-       --analysis_parent_dir $PWD/.github/data \
+       --analysis_parent_dir $PWD/.github/data/mock_runs \
        --outdir results
 
 cp .nextflow.log artifacts/
@@ -27,7 +27,7 @@ echo Nextflow run previous release in --illumina mode.. >> ../artifacts/test_art
 NXF_VER=20.10.0 nextflow -quiet run ./main.nf \
        -profile conda \
        --cache ~/.conda/envs \
-       --analysis_parent_dir $PWD/.github/data \
+       --analysis_parent_dir $PWD/.github/data/mock_runs \
        --outdir results
 
 cp .nextflow.log ../artifacts/previous_release.nextflow.log
