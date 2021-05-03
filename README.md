@@ -1,5 +1,7 @@
 # pangolin-nf
 
+![push main](https://github.com/BCCDC-PHL/pangolin-nf/actions/workflows/push_main.yml/badge.svg)
+
 Call SARS-CoV-2 lineages using [pangolin](https://github.com/cov-lineages/pangolin) across many sequencing runs. Before each analysis, update pangolin/pangoLEARN to ensure that the latest lineage definitions are used.
 
 This pipeline also incorporates a 'genome completeness threshold' to assist with quality control. The genome completeness is the proportion of the full SARS-CoV-2 genome for which consensus sequence was successfully generated. That statistic is included in the output. In addition, the `genome_completeness_status` field indicates whether the sample was above or below a genome completness threshold. The genome completeness threshold is set to 85% by default but can be set to another value using the `--genome_completeness_threshold` flag.

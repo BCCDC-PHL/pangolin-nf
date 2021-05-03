@@ -13,23 +13,6 @@ process update_pangolin {
   """
 }
 
-process list_all_samples_for_run {
-  tag { run_id }
-
-  executor 'local'
-
-  input:
-  tuple val(run_id), path(fastq_dir)
-
-  output:
-  tuple val(run_id), path("${run_id}_all_samples.csv")
-
-  script:
-  """
-  ls -1 ${fastq_dir}/*R1*.fastq.gz | cut -d '/' -f 2 | grep -iv "^POS" | grep -iv "^NEG" | grep -v "^Undetermined" | cut -d '_' -f 1 > ${run_id}_all_samples.csv
-  """
-}
-
 process get_latest_artic_analysis_version {
 
   tag { run_id }
