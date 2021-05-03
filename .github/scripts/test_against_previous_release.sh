@@ -20,8 +20,6 @@ git clone https://github.com/BCCDC-PHL/pangolin-nf.git previous_release
 cd previous_release
 git checkout dc6c4d084088dd6083bf7234374548b49f4619ba
 
-# the github runner only has 2 cpus available, so replace for that commit required:
-sed -i s'/cpus = 4/cpus = 2/'g conf/resources.config
 
 echo Nextflow run previous release in --illumina mode.. >> ../artifacts/test_artifact.log
 NXF_VER=20.10.0 nextflow -quiet run ./main.nf \
