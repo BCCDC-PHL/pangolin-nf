@@ -19,7 +19,7 @@ cp -r results artifacts/pull_request_results
 # run tests against previous previous_release to compare outputs 
 git clone https://github.com/BCCDC-PHL/pangolin-nf.git previous_release 
 cd previous_release
-git checkout -b previous-release 8ce574b890133b8369276dc0f1df200a5e8ccddf 
+git checkout -b previous-release bab48334fc7a60f1b645cdcdcd2a1c92a3ecc823 
 
 
 echo Nextflow run previous release in --illumina mode.. >> ../artifacts/test_artifact.log
