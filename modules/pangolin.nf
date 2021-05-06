@@ -71,9 +71,8 @@ process pangolin {
 
   script:
   """
-  PANGOLIN_VERSION=\$(pangolin -v | cut -d ' ' -f 2)
   pangolin ${consensus_multi_fasta}
-  awk -F "," -v pangolin_version="\${PANGOLIN_VERSION}" 'BEGIN { OFS=FS }; /^taxon/ { print "run_id", "sample_id", \$2, \$3, \$4, "pangolin_version", \$5, \$6, \$7 }; !/^taxon/ { print "${run_id}", \$1, \$2, \$3, \$4, pangolin_version, \$5, \$6, \$7 }' lineage_report.csv > ${run_id}_lineage_report.csv
+  awk -F "," 'BEGIN { OFS=FS }; /^taxon/ { print "run_id", "sample_id", \$2, \$3, \$4, \$5, \$6, \$7, \$8 }; !/^taxon/ { print "${run_id}", \$1, \$2, \$3, \$4, \$5, \$6, \$7, \$8 }' lineage_report.csv > ${run_id}_lineage_report.csv
   """
 }
 
