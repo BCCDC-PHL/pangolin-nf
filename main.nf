@@ -18,8 +18,7 @@ workflow {
     get_latest_artic_analysis_version(ch_analysis_dirs)
     prepare_multi_fasta(ch_analysis_dirs.map{ it -> [it.baseName, it] }.join(get_latest_artic_analysis_version.out).combine(ch_genome_completeness_threshold))
     pangolin(prepare_multi_fasta.out.combine(update_pangolin.out))
-    pangolin.out.map{ it -> it[1] }.collectFile(keepHeader: true, sort: { it.text }, name: "pangolin_lineages.csv", storeDir: "${params.outdir}")
     add_records_for_samples_below_completeness_threshold(pangolin.out.join(prepare_multi_fasta.out.map{ it -> [it[0], it[2], it[3]] }))
-    add_records_for_samples_below_completeness_threshold.out.map{ it -> it[1] }.collectFile(keepHeader: true, sort: { it.text }, name: "pangolin_lineages_with_incomplete.csv", storeDir: "${params.outdir}")
+    add_records_for_samples_below_completeness_threshold.out.map{ it -> it[1] }.collectFile(keepHeader: true, sort: { it.text }, name: "pangolin_lineages.csv", storeDir: "${params.outdir}")
   
 }
