@@ -1,15 +1,24 @@
 process update_pangolin {
+
+  tag { should_update.toString() }
+  
   executor 'local'
 
   input:
   val(should_update)
 
   output:
-  val(true)
+  val(did_update)
 
   script:
+  did_update = should_update
+  should_update_string = should_update ? "true" : "false"
   """
-  pangolin --update
+  should_update=${should_update_string}
+  if [ \$should_update ]
+  then
+    pangolin --update
+  fi
   """
 }
 
@@ -64,7 +73,7 @@ process pangolin {
   tag { run_id }
 
   input:
-  tuple val(run_id), path(consensus_multi_fasta), path(included_samples), path(above_threshold), val(below_threshold)
+  tuple val(run_id), path(consensus_multi_fasta), path(above_threshold), val(below_threshold), val(pangolin_updated)
 
   output:
   tuple val(run_id), path("${run_id}_lineage_report.csv")

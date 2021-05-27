@@ -5,3 +5,7 @@ channels:
   - defaults
 dependencies:
   - pangolin
+  - usher
+  - pip:
+    - git+https://github.com/cov-lineages/scorpio.git
+    - git+https://github.com/cov-lineages/constellations.git

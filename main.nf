@@ -14,7 +14,7 @@ workflow {
   ch_genome_completeness_threshold = Channel.value("${params.genome_completeness_threshold}")
 
   main:
-    update_pangolin(Channel.value(true))
+    update_pangolin(Channel.value(params.update))
     get_latest_artic_analysis_version(ch_analysis_dirs)
     prepare_multi_fasta(ch_analysis_dirs.map{ it -> [it.baseName, it] }.join(get_latest_artic_analysis_version.out).combine(ch_genome_completeness_threshold))
     pangolin(prepare_multi_fasta.out.combine(update_pangolin.out))
