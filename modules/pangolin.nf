@@ -15,7 +15,7 @@ process update_pangolin {
   should_update_string = should_update ? "true" : "false"
   """
   should_update=${should_update_string}
-  if [ \$should_update ]
+  if [ "\$should_update" = true ]
   then
     pangolin --update
   fi
