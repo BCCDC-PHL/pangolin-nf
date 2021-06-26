@@ -86,10 +86,10 @@ def main(args):
     comparison = compare_outputs(output_1, output_2)
     for run in comparison.keys():
         for mismatch in comparison[run]['mismatches']:
-            sample_id = mismatch.keys()[0]
+            sample_id = list(mismatch.keys())[0]
             output_1_lineage = mismatch[sample_id]['output_1_lineage']
             output_2_lineage = mismatch[sample_id]['output_2_lineage']
-            print('\t'.join([run, sample_id, output_1_lineage, output_2_lineage]))
+            print(','.join([run, sample_id, output_1_lineage, output_2_lineage]))
     
     
     exit(0)
