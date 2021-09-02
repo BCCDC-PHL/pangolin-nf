@@ -78,15 +78,18 @@ process prepare_multi_fasta {
   tuple val(run_id), path("${run_id}.consensus.fa"), path("${run_id}_above_completeness_threshold.csv"), path("${run_id}_below_completeness_threshold.csv")
 
   script:
-  // awk line takes fasta header like this:     >Consensus_R123456.primertrimmed.consensus_threshold_0.75_quality_20
-  // ...and converts it to something like this: >R123456
+  // awk line takes ivar fasta header like this:     >Consensus_R123456.primertrimmed.consensus_threshold_0.75_quality_20
+  // ...and converts it to something like this:      >R123456
+  // for freebayes consensus, header is unchanged but fasta is converted to single line
+  consensus_subdir = params.ivar_consensus ? 'ncovIllumina_sequenceAnalysis_makeConsensus' : 'ncovIllumina_sequenceAnalysis_callConsensusFreebayes'
+  awk_string = params.ivar_consensus ? '/^>/ { split($2, a, "."); print ">"a[1] }; !/^>/ { print $0 }' : '/^>/ { print $0 }; !/^>/ { printf "%s", $0 }; END { print ""}'
   """
   export LATEST_ANALYSIS=\$(cat ${latest_artic_analysis_version})
   tail -n+2 ${analysis_dir}/ncov2019-artic-nf-\${LATEST_ANALYSIS}-output/*.qc.csv | grep -iv '^NEG' | grep -iv '^POS' | awk -F "," 'BEGIN {OFS=FS}; \$2 < (100 - ${genome_completeness_threshold}) {print \$1,(100 - \$2)}' > ${run_id}_above_completeness_threshold.csv
   tail -n+2 ${analysis_dir}/ncov2019-artic-nf-\${LATEST_ANALYSIS}-output/*.qc.csv | grep -iv '^NEG' | grep -iv '^POS' | awk -F "," 'BEGIN {OFS=FS}; \$2 > (100 - ${genome_completeness_threshold}) {print \$1,(100 - \$2)}' > ${run_id}_below_completeness_threshold.csv
   while IFS="," read -r sample_id percent_n; do
-    cat ${analysis_dir}/ncov2019-artic-nf-\${LATEST_ANALYSIS}-output/ncovIllumina_sequenceAnalysis_makeConsensus/\${sample_id}*.fa \
-      | awk -F "_" '/^>/ { split(\$2, a, "."); print ">"a[1] }; !/^>/ { print \$0 }' \
+    cat ${analysis_dir}/ncov2019-artic-nf-\${LATEST_ANALYSIS}-output/${consensus_subdir}/\${sample_id}*.fa \
+      | awk -F "_" '${awk_string}' \
       >> ${run_id}.consensus.fa;
   done < <(cat ${run_id}_above_completeness_threshold.csv ${run_id}_below_completeness_threshold.csv)
   """
