@@ -16,10 +16,10 @@ workflow {
 
   main:
     update_pangolin(Channel.value(params.update_pangolin))
-    update_pangolin_data(Channel.value(params.update_pangolin_data))
+    update_pangolin_data(Channel.value(params.update_pangolin_data).combine(update_pangolin.out))
     get_latest_artic_analysis_version(ch_analysis_dirs)
     prepare_multi_fasta(ch_analysis_dirs.map{ it -> [it.baseName, it] }.join(get_latest_artic_analysis_version.out).combine(ch_genome_completeness_threshold))
-    pangolin(prepare_multi_fasta.out.combine(update_pangolin.out))
+    pangolin(prepare_multi_fasta.out.combine(update_pangolin_data.out))
     add_records_for_samples_below_completeness_threshold(pangolin.out.join(prepare_multi_fasta.out.map{ it -> [it[0], it[2], it[3]] }))
     add_records_for_samples_below_completeness_threshold.out.map{ it -> it[1] }.collectFile(keepHeader: true, sort: { it.text }, name: "pangolin_lineages.csv", storeDir: "${params.outdir}")
   

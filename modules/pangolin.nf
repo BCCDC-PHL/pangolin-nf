@@ -29,7 +29,7 @@ process update_pangolin_data {
   executor 'local'
 
   input:
-  val(should_update)
+  tuple val(should_update), val(pangolin_did_update)
 
   output:
   val(did_update)
