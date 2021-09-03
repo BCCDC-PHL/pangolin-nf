@@ -2,16 +2,18 @@
 
 ![push main](https://github.com/BCCDC-PHL/pangolin-nf/actions/workflows/push_main.yml/badge.svg)
 
-Call SARS-CoV-2 lineages using [pangolin](https://github.com/cov-lineages/pangolin) across many sequencing runs. Before each analysis, update pangolin/pangoLEARN to ensure that the latest lineage definitions are used.
+Call SARS-CoV-2 lineages using [pangolin](https://github.com/cov-lineages/pangolin) across many sequencing runs. Offers the ability to update pangolin/pangoLEARN to ensure that the latest lineage definitions are used. This pipeline is designed to take the output of [BCCDC-PHL/ncov2019-artic-nf](https://github.com/BCCDC-PHL/ncov2019-artic-nf) as its input, and makes some assumptions about directory structures for finding consensus sequences to analyze.
 
 This pipeline also incorporates a 'genome completeness threshold' to assist with quality control. The genome completeness is the proportion of the full SARS-CoV-2 genome for which consensus sequence was successfully generated. That statistic is included in the output. In addition, the `genome_completeness_status` field indicates whether the sample was above or below a genome completness threshold. The genome completeness threshold is set to 85% by default but can be set to another value using the `--genome_completeness_threshold` flag.
 
-The `--update` flag controls whether or not pangolin should be automatically updated before proceeding with analysis. Automatic updates are disabled by default.
+The `--update_pangolin` flag controls whether or not pangolin should be updated before proceeding with analysis. The `--update_pangolin_data` flag controls whether pangolin's data dependencies such as pangoLEARN models and lineage definitions should be updated before proceeding with analysis. Updates are disabled by default.
 
 ## Usage
 ```
 nextflow run BCCDC-PHL/pangolin-nf \
-  [--update] \
+  [--update_pangolin] \
+  [--update_pangolin_data] \
+  [--ivar_consensus] \
   [--genome_completeness_threshold <genome_completeness_threshold>] \
   --analysis_parent_dir <analysis_parent_dir> \
   --outdir <outdir>
