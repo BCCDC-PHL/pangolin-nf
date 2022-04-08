@@ -5,7 +5,7 @@ set -eo pipefail
 export PATH=/opt/miniconda3/bin:$PATH
 export PATH=/opt/nextflow/bin:$PATH
 
-nextflow -quiet self-update 2> /dev/null
+nextflow -quiet self-update > /dev/null 2>&1
 
 # write test log as github Action artifact
 echo Nextflow run current PR >> artifacts/test_artifact.log
