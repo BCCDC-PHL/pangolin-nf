@@ -16,7 +16,9 @@ DEBIAN_FRONTEND=noninteractive sudo apt-get install -y \
 source /etc/os-release
 
 sudo sh -c "echo 'deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list"
-sudo wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/xUbuntu_${VERSION_ID}/Release.key -O- | apt-key add -
+wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/xUbuntu_${VERSION_ID}/Release.key  
+sudo apt-key add Release.key
+rm Release.key
 
 sudo apt-get update -qq -y
 sudo apt-get -qq --yes install podman
