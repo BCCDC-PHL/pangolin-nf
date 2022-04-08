@@ -32,8 +32,8 @@ jobs:
       run: bash .github/scripts/install_conda.sh
     - name: Install Nextflow
       run: bash .github/scripts/install_nextflow.sh
-    - name: Test against previous release
-      run: bash .github/scripts/test_against_previous_release.sh
+    - name: Test against expected results
+      run: bash .github/scripts/test_output_matches_expected_results.sh
     - name: if failure, add latest NF log to artifacts
       run: mv .nextflow.log artifacts/failure.nextflow.log && mv work artifacts/work_failed
       if: failure()

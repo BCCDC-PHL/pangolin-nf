@@ -1,2 +1,2 @@
-sample_name,pct_N_bases
-MW859462,0.66
+sample_name,pct_N_bases,pct_covered_bases
+MW859462,0.66,99.34

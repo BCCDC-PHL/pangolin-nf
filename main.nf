@@ -6,7 +6,7 @@ include { update_pangolin } from './modules/pangolin.nf'
 include { update_pangolin_data } from './modules/pangolin.nf'
 include { prepare_multi_fasta } from './modules/pangolin.nf'
 include { pangolin } from './modules/pangolin.nf'
-include { add_genome_completeness } from './modules/pangolin.nf'
+
 
 def getArticSubDirs(Path p) {
   pattern = ~/ncov2019-artic-nf*/
@@ -19,6 +19,7 @@ def hasArticSubDirs(Path p) {
   articSubDirs = getArticSubDirs(p)
   return (articSubDirs.size() > 0)
 }
+
 
 workflow {
 
