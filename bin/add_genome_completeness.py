@@ -4,6 +4,7 @@ import argparse
 import csv
 import json
 import sys
+import os
 
 
 def parse_artic_qc_csv(artic_qc_csv_path):
@@ -66,7 +67,7 @@ def main(args):
         'note',
     ]
 
-    writer = csv.DictWriter(sys.stdout, fieldnames=output_fieldnames)
+    writer = csv.DictWriter(sys.stdout, fieldnames=output_fieldnames, lineterminator=os.linesep)
 
     writer.writeheader()
     for sample_id, row in pangolin_lineages.items():
