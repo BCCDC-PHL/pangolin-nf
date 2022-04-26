@@ -2,24 +2,19 @@ on:
   pull_request:
     branches:
     - main
-name: Pull Request
+name: Test Podman
 jobs:
   test:
-    name: Run tests
+    name: Test Podman
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
     - name: create artifacts dir to save test logs
       run: mkdir artifacts
-    - name: Install Miniconda
-      run: bash .github/scripts/install_conda.sh
+    - name: Install Podman
+      run: bash .github/scripts/install_podman.sh
     - name: Install Nextflow
       run: bash .github/scripts/install_nextflow.sh
-    - name: Test against expected results
-      run: bash .github/scripts/test_output_matches_expected_results.sh
-    - name: if failure, add latest NF log to artifacts
-      run: mv .nextflow.log artifacts/failure.nextflow.log && mv work artifacts/work_failed
-      if: failure()
     - uses: actions/upload-artifact@v1
       if: always()
       with:

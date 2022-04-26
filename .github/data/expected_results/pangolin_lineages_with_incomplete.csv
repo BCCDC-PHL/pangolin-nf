@@ -1,2 +1,0 @@
-run_id,sample_id,genome_completeness,genome_completness_status,lineage,conflict,pangoLEARN_version,pangolin_version,pango_version,status,note
-test-run-01,MW859462,99.34,ABOVE_GENOME_COMPLETENESS_THRESHOLD,B.1.429,0.0,2021-04-28,2.4,v1.1.23,passed_qc,

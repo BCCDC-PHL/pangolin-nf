@@ -6,7 +6,7 @@ export PATH=/opt/miniconda3/bin:$PATH
 export PATH=/opt/nextflow/bin:$PATH
 
 # write test log as github Action artifact
-echo Nextflow run current PR in --illumina mode.. >> artifacts/test_artifact.log
+echo Nextflow run current PR >> artifacts/test_artifact.log
 NXF_VER=20.10.0 nextflow -quiet run ./main.nf \
        -profile conda \
        --cache ~/.conda/envs \
@@ -19,10 +19,10 @@ cp -r results artifacts/pull_request_results
 # run tests against previous previous_release to compare outputs 
 git clone https://github.com/BCCDC-PHL/pangolin-nf.git previous_release 
 cd previous_release
-git checkout -b previous-release d1b6abb0f153f249b99e6c3b03cf6a6b3f9c2a46
+git checkout -b previous-release bdb233155b5589dd146c7e1dbb1d2a8cb338f3f3
 
 
-echo Nextflow run previous release in --illumina mode.. >> ../artifacts/test_artifact.log
+echo Nextflow run previous release >> ../artifacts/test_artifact.log
 NXF_VER=20.10.0 nextflow -quiet run ./main.nf \
        -profile conda \
        --cache ~/.conda/envs \
