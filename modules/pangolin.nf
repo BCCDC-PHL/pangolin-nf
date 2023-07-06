@@ -89,8 +89,11 @@ process pangolin {
 
   script:
   """
+  mkdir -p ./tmp
+
   pangolin \
     --threads ${task.cpus} \
+    --tempdir ./tmp \
     --analysis-mode ${params.analysis_mode} \
     ${consensus_multi_fasta}
 
