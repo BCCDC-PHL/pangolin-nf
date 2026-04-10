@@ -15,7 +15,7 @@ jobs:
       run: bash .github/scripts/install_podman.sh
     - name: Install Nextflow
       run: bash .github/scripts/install_nextflow.sh
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v1
       if: always()
       with:
         name: test_artifacts
