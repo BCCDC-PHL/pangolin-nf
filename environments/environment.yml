@@ -2,6 +2,5 @@ name: pangolin
 channels:
   - conda-forge
   - bioconda
-  - defaults
 dependencies:
-  - pangolin=4.3
+  - pangolin=4.4
